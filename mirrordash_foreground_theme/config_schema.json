@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Foreground Theme",
+  "description": "Seasonal decoration over the mirror: snow, New Year's sparkles, hearts, spring petals, autumn leaves or Halloween embers. Put it in Foreground. Shapes that keep moving keep the Raspberry Pi drawing (warmer, and a video beside it may stutter); showers or still shapes cost next to nothing.",
+  "type": "object",
+  "properties": {
+    "theme": {
+      "type": "string",
+      "default": "auto",
+      "enum": ["auto", "snow", "newyear", "hearts", "petals", "leaves", "halloween"],
+      "enum_titles": ["By date", "Snow", "New Year's sparkles", "Hearts", "Spring petals", "Autumn leaves", "Halloween embers"],
+      "title": "Theme",
+      "description": "By date: snow 1 Dec–6 Jan, sparkles 31 Dec–1 Jan, hearts 10–14 Feb, petals April–May, leaves 20 Sep–15 Nov, embers 25–31 Oct, and nothing on other days. Or one theme all year."
+    },
+    "mode": {
+      "type": "string",
+      "default": "showers",
+      "enum": ["showers", "falling", "still"],
+      "enum_titles": ["Now and then", "All the time", "Still"],
+      "title": "Movement",
+      "description": "Now and then: it moves for half a minute, then stands still. All the time looks best and costs the most."
+    },
+    "amount": {
+      "type": "string",
+      "default": "normal",
+      "enum": ["light", "normal", "heavy"],
+      "enum_titles": ["A little", "Normal", "A lot"],
+      "title": "How Much",
+      "description": "Fewer shapes are calmer and lighter for the Pi. How bright: the Opacity setting below."
+    },
+    "shower_on_arrival": {
+      "type": "boolean",
+      "default": true,
+      "title": "Move When Someone Comes",
+      "description": "Now and then: it moves when the motion sensor sees someone at the mirror."
+    },
+    "shower_every": {
+      "type": "integer",
+      "default": 15,
+      "title": "Minutes Between",
+      "description": "Now and then: how often it moves by itself."
+    },
+    "drift": {
+      "type": "boolean",
+      "default": true,
+      "title": "Snowdrift",
+      "description": "With snow: a low drift along the bottom edge. It never moves."
+    }
+  }
+}

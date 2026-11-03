@@ -1,0 +1,45 @@
+<!-- A theme's shapes over the screen, in MirrorDash's Foreground position (the mirror sets --md-layer-size
+     there; in a box it's a box of them). Each layer is one SVG tile (its own size, --tile) repeated over the
+     screen; while it moves the layer slides exactly one tile, a whole pixel per step, and starts over where it
+     looks the same. No script: the mirror pauses the animation while a video plays. -->
+<style>
+    .snow {
+        position: relative;
+        width: var(--md-layer-size, 40vw);
+        height: var(--md-layer-size, 30vh);
+        overflow: hidden;
+        pointer-events: none;
+    }
+    .snow-layer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(-1 * var(--tile));
+        height: calc(100% + var(--tile));
+        background-size: var(--tile) var(--tile);
+        background-repeat: repeat;
+        will-change: transform;
+    }
+    /* One whole pixel per step: the Pi draws only when a shape moved (each layer sets its own steps and duration) */
+    .snow.moving .snow-layer { animation: snow-fall 20s steps(400) infinite; }
+    .snow.rising .snow-layer { animation-direction: reverse; }  /* embers rise */
+    @keyframes snow-fall { to { transform: translateY(var(--tile)); } }
+    .snow-drift {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 24px;
+    }
+</style>
+
+<div class="snow{% if moving %} moving{% endif %}{% if rising %} rising{% endif %}">
+    {% for layer in layers %}
+    <div class="snow-layer" style="--tile: {{ layer.tile }}px; background-image: {{ layer.image }}; animation-duration: {{ layer.seconds }}s; animation-timing-function: steps({{ layer.tile }});"></div>
+    {% endfor %}
+    {% if drift %}
+    <svg class="snow-drift" viewBox="0 0 1600 24" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 24 V16 Q140 8 300 15 T620 13 T960 16 T1300 10 T1600 15 V24Z" fill="rgba(255, 255, 255, 0.85)"/>
+    </svg>
+    {% endif %}
+</div>
