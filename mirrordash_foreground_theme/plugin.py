@@ -4,7 +4,7 @@ theme of the day (dates.py), and outside every season the card is empty and cost
 
 Motion that never stops makes a Raspberry Pi redraw the screen all day (MirrorDash ARCHITECTURE #37: warm,
 and a video beside it stutters), so each theme has a mode: showers (when someone comes to the mirror, and now
-and then), all the time, or still. It's plain CSS, so the mirror pauses it while a video plays.
+and then), all the time, or still. It's plain CSS, and the mirror hides the Foreground while a video plays.
 
 The parts: themes.py (the data), shapes.py and shapes/ (the shapes), tiles.py (how they're drawn),
 greeting.py and fonts/ (the birthday text), schema.py (writes config_schema.json from themes.py)."""

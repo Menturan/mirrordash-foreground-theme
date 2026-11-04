@@ -60,7 +60,7 @@ Each theme has a folding block of its own in the module's settings:
 | Twinkling (stars) | Medium: up to 30 stars fade in and out |
 | Swaying or spinning one by one | High: each shape (never more than 60) is an element of its own |
 
-A higher **Speed** makes the Pi draw more often while it moves. The mirror pauses every motion while a video plays.
+A higher **Speed** makes the Pi draw more often while it moves. While a module plays a video, the mirror hides the decoration altogether (MirrorDash after 0.12; older versions pause it).
 
 All layers step at the same moments, 36 times a second, so the screen redraws only then. Each moving layer is a
 texture in the GPU's memory, which a Raspberry Pi 3 has little of (about 40 MB free beside the other modules), so
