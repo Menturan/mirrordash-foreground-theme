@@ -3,8 +3,8 @@
      pixels and starting over where it looks the same; every layer steps on the same beat (tiles.py), so the Pi
      redraws only then. Each layer is one GPU texture and nothing else: sway moves it with `translate` beside
      the fall's `transform`, wind skews it (no wrapper layers, tiles.gpu_mb() counts what it costs). The
-     one-by-one motions and twinkling stars are elements of their own. No script: the mirror pauses the
-     animations while a video plays, and newer ones hide the Foreground then. -->
+     one-by-one motions and twinkling stars are elements of their own. No script. While a module plays a video
+     the decoration hides itself (:host([data-video-is-playing]) below). -->
 <style>
     .fx {
         position: relative;
@@ -13,6 +13,9 @@
         overflow: hidden;
         pointer-events: none;
     }
+    /* While a module plays a video the decoration goes away, whatever its movement, and comes back after: the
+       mirror sets data-video-is-playing on this card's host (MirrorDash ARCHITECTURE #33) */
+    :host([data-video-is-playing]) .fx { display: none; }
     .fx-shapes { position: absolute; inset: 0; }
     .fx-layer {
         position: absolute;
