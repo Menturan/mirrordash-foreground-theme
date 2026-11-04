@@ -38,17 +38,23 @@
         "Rain"
       ]
     },
+    "shower_every": {
+      "type": "integer",
+      "default": 1,
+      "title": "Minutes Between",
+      "description": "Showers: how often one comes by itself."
+    },
     "shower_on_arrival": {
       "type": "boolean",
       "default": true,
       "title": "Move When Someone Comes",
-      "description": "Now and then: it moves when the motion sensor sees someone at the mirror."
+      "description": "Showers: one when the motion sensor sees someone at the mirror."
     },
-    "shower_every": {
-      "type": "integer",
-      "default": 15,
-      "title": "Minutes Between",
-      "description": "Now and then: how often it moves by itself."
+    "shower_on_wake": {
+      "type": "boolean",
+      "default": true,
+      "title": "Move When the Screen Wakes",
+      "description": "Showers: one when the screen turns on, this module's schedule begins or privacy mode ends."
     },
     "birthday": {
       "type": "object",
@@ -64,7 +70,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -72,7 +78,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -114,7 +120,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "spin_each",
           "enum": [
             "straight",
@@ -263,7 +269,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -271,7 +277,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -311,7 +317,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "straight",
           "enum": [
             "straight",
@@ -380,7 +386,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -388,7 +394,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -428,7 +434,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "sway",
           "enum": [
             "straight",
@@ -497,7 +503,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -505,7 +511,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -547,7 +553,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "sway",
           "enum": [
             "straight",
@@ -628,7 +634,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -636,7 +642,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -682,7 +688,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "sway",
           "enum": [
             "straight",
@@ -763,7 +769,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -771,7 +777,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -813,7 +819,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "straight",
           "enum": [
             "straight",
@@ -900,7 +906,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -908,7 +914,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -948,7 +954,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "sway",
           "enum": [
             "straight",
@@ -1029,7 +1035,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1037,7 +1043,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -1079,7 +1085,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "sway",
           "enum": [
             "straight",
@@ -1160,7 +1166,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1168,7 +1174,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -1212,7 +1218,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "sway",
           "enum": [
             "straight",
@@ -1293,7 +1299,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1301,7 +1307,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -1341,7 +1347,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "twinkle",
           "enum": [
             "twinkle",
@@ -1416,7 +1422,7 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1424,7 +1430,7 @@
             "still"
           ],
           "enum_titles": [
-            "Now and then",
+            "Showers",
             "All the time",
             "Still"
           ]
@@ -1462,7 +1468,7 @@
         "motion": {
           "type": "string",
           "title": "Motion",
-          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Showers.",
           "default": "straight",
           "enum": [
             "straight",

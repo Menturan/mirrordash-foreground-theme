@@ -38,7 +38,7 @@ Each theme has a folding block of its own in the module's settings:
 | Setting | |
 | :--- | :--- |
 | Show By Date, From, To | Whether By date shows it, and on which days (MM-DD; may run over New Year). Easter and Midsummer are worked out each year. |
-| Movement | Now and then, All the time or Still (below) |
+| Movement | Showers, All the time or Still (below) |
 | Shapes, Colours | The theme's variants and palettes |
 | Motion | Straight down, slanting as in wind, swaying, or swaying or spinning one by one |
 | How Many, Size, Brightness, Speed | Sliders. Autumn leaves start few and large; snow many and small. |
@@ -49,9 +49,13 @@ Each theme has a folding block of its own in the module's settings:
 
 | Movement | |
 | :--- | :--- |
-| Now and then (default) | It moves for half a minute when the motion sensor sees someone at the mirror, and by itself every 15 minutes (*Minutes Between*); otherwise it stands still. |
-| All the time | Keeps the Raspberry Pi drawing all day: it runs warmer, and a video playing beside it may stutter. |
-| Still | Never moves. Costs nothing. |
+| Showers (default) | Half a minute that fades in and out, then no decoration at all until the next: every minute (*Minutes Between*), when the motion sensor sees someone (*Move When Someone Comes*) and when the screen turns on (*Move When the Screen Wakes*, also when the module's schedule begins or privacy mode ends). Best when the screen is on for hours. |
+| All the time | Moves while the screen is on. Best when the screen only lights up when someone comes. |
+| Still | Never moves. Costs next to nothing. |
+
+Measured on a Pi 3B with the screen on (autumn leaves, the mirror's other modules beside them): showers once a
+minute about 12 % CPU and 56 °C, all the time about 18 % and 64 °C, the decoration off about 5 %; it never
+throttled. A birthday greeting stays all day whatever the movement.
 
 | Motion | Cost while it moves |
 | :--- | :--- |

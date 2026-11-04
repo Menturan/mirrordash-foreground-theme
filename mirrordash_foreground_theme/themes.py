@@ -13,7 +13,7 @@ MOTIONS = {
     "twinkle": "Twinkling (uses more while it moves)",
 }
 STANDARD_MOTIONS = ("straight", "wind", "sway", "sway_each", "spin_each")
-MODES = {"showers": "Now and then", "falling": "All the time", "still": "Still"}
+MODES = {"showers": "Showers", "falling": "All the time", "still": "Still"}
 
 
 @dataclass(frozen=True)

@@ -37,11 +37,13 @@ def theme_block(key: str, theme: Theme) -> dict:
         fields["end"] = {"type": "string", "title": "To", "default": end, "description": "MM-DD; may be after New Year."}
     fields |= {
         "mode": choice("Movement", MODES, default(theme, "mode"),
-                       "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day."),
+                       "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is "
+                       "on for hours. All the time: moves while the screen is on; best when it only lights up when someone "
+                       "comes. Still: never moves."),
         "variant": choice("Shapes", theme.variants, default(theme, "variant")),
         "palette": choice("Colours", theme.palettes, default(theme, "palette")),
         "motion": choice("Motion", {name: MOTIONS[name] for name in theme.motions}, default(theme, "motion"),
-                         "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then."),
+                         "How the shapes move. Those marked heavy draw each shape on its own: best with Showers."),
         "amount": slider("How Many", 1, 10, 1, default(theme, "amount"), "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory)."),
         "size": slider("Size (%)", 50, 200, 10, default(theme, "size"), "How large the shapes are."),
         "brightness": slider("Brightness (%)", 10, 100, 5, default(theme, "brightness"), "How bright the shapes are."),
@@ -72,10 +74,12 @@ def build() -> dict:
         "properties": {
             "theme": choice("Theme", {"auto": "By date"} | {key: theme.title for key, theme in THEMES.items()}, "auto",
                             by_date + " Or one theme all year."),
+            "shower_every": {"type": "integer", "default": 1, "title": "Minutes Between",
+                             "description": "Showers: how often one comes by itself."},
             "shower_on_arrival": {"type": "boolean", "default": True, "title": "Move When Someone Comes",
-                                  "description": "Now and then: it moves when the motion sensor sees someone at the mirror."},
-            "shower_every": {"type": "integer", "default": 15, "title": "Minutes Between",
-                             "description": "Now and then: how often it moves by itself."},
+                                  "description": "Showers: one when the motion sensor sees someone at the mirror."},
+            "shower_on_wake": {"type": "boolean", "default": True, "title": "Move When the Screen Wakes",
+                               "description": "Showers: one when the screen turns on, this module's schedule begins or privacy mode ends."},
         } | {key: theme_block(key, theme) for key, theme in THEMES.items()},
     }
 

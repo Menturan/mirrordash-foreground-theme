@@ -26,8 +26,8 @@ def tile_svg(layer: dict) -> str:
 @pytest.mark.asyncio
 async def test_out_of_season_the_card_is_empty_but_a_chosen_theme_shows_all_year():
     assert await make_module(today=date(2026, 7, 1)).render() == ""
-    assert (await make_module(today=date(2026, 7, 1), theme="leaves").render())["layers"]
-    assert (await make_module(today=date(2026, 7, 1), preview=True).render())["layers"]  # the admin page's preview
+    assert (await make_module(today=date(2026, 7, 1), theme="leaves", leaves={"mode": "still"}).render())["layers"]
+    assert (await make_module(today=date(2026, 7, 1), preview=True).render())["layers"]  # the admin page's preview: a shower
 
 
 @pytest.mark.asyncio
@@ -35,15 +35,15 @@ async def test_each_theme_and_variant_draws_its_shapes_in_its_colours():
     for key, theme in THEMES.items():
         for variant, (_, shapes) in theme.variants.items():
             for palette, (_, colors) in theme.palettes.items():
-                shown = await make_module(theme=key, **{key: {"variant": variant, "palette": palette, "motion": theme.motions[0], "amount": 7}}).render()
+                shown = await make_module(theme=key, **{key: {"variant": variant, "palette": palette, "motion": theme.motions[0], "amount": 7, "mode": "still"}}).render()
                 if not shown["layers"]:
                     continue  # twinkle draws its layers dimmer, but still draws them; one by one has none
                 svg = tile_svg(shown["layers"][0])
                 assert set(re.findall(r'fill="(#[0-9a-f]{6})"', svg)) <= set(colors)
                 assert svg.count("<symbol") == len(shapes)
     assert (await make_module(theme="halloween", halloween={"variant": "ghosts"}).render())["rising"] is True
-    assert (await make_module(theme="snow").render())["drift"] is True
-    assert (await make_module(theme="leaves").render())["drift"] is False  # a drift is snow's
+    assert (await make_module(theme="snow", snow={"mode": "still"}).render())["drift"] is True
+    assert (await make_module(theme="leaves", leaves={"mode": "still"}).render())["drift"] is False  # a drift is snow's
 
 
 @pytest.mark.asyncio
@@ -100,10 +100,10 @@ def test_every_layer_steps_whole_pixels_on_the_shared_beat():
 
 @pytest.mark.asyncio
 async def test_one_by_one_draws_a_few_shapes_of_their_own_and_no_layers():
-    shown = await make_module(theme="leaves", leaves={"motion": "spin_each", "amount": 10}).render()
+    shown = await make_module(theme="leaves", leaves={"motion": "spin_each", "amount": 10, "mode": "falling"}).render()
     assert shown["layers"] == [] and len(shown["singles"]) == tiles.EACH_LIMIT  # never more, whatever the amount
     assert 'id="fg-0"' in shown["symbols"]
-    stars = await make_module(theme="stars").render()
+    stars = await make_module(theme="stars", stars={"mode": "falling"}).render()
     assert stars["layers"] and 0 < len(stars["singles"]) <= tiles.TWINKLE_LIMIT
 
 
@@ -131,6 +131,28 @@ async def test_showers_follow_the_theme_of_the_day():
     still = make_module(snow={"mode": "still"})
     still.on_motion({"motion": True})
     assert (await still.render())["moving"] is False
+
+
+@pytest.mark.asyncio
+async def test_between_showers_nothing_is_drawn_and_a_shower_fades_in_and_out():
+    """A frozen decoration looked like a broken animation: showers draw nothing between them (no GPU memory
+    either), fade (widget.html) while they last, and come when the card comes on the screen."""
+    module = make_module()  # snow, showers
+    assert module.every == 60  # one a minute by default
+    between = await module.render()
+    assert between["layers"] == [] and between["singles"] == [] and between["drift"] is False and between["shower"] is False
+    module.on_shown(False)
+    assert (await module.render())["shower"] is False
+    module.on_shown(True)  # the screen woke (or the schedule began, or privacy mode ended)
+    during = await module.render()
+    assert during["shower"] is True and during["layers"] and during["drift"] is True
+    asleep = make_module(shower_on_wake=False)
+    asleep.on_shown(True)
+    assert (await asleep.render())["shower"] is False
+    falling = await make_module(snow={"mode": "falling"}).render()
+    assert falling["moving"] is True and falling["shower"] is False  # all the time: no fading
+    people = [{"name": "Anna", "date": "12-20"}]
+    assert (await make_module(theme="birthday", birthday={"people": people}).render())["greeting"]  # stays all day
 
 
 @pytest.mark.asyncio

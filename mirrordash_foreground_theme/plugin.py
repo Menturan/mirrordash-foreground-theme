@@ -3,8 +3,9 @@ the whole screen and takes no clicks). Each theme has its own settings (settings
 theme of the day (dates.py), and outside every season the card is empty and costs nothing.
 
 Motion that never stops makes a Raspberry Pi redraw the screen all day (MirrorDash ARCHITECTURE #37: warm,
-and a video beside it stutters), so each theme has a mode: showers (when someone comes to the mirror, and now
-and then), all the time, or still. It's plain CSS, and it hides itself while a module plays a video.
+and a video beside it stutters), so each theme has a mode: showers (half a minute that fades in and out, every
+minute, when someone comes and when the screen wakes; nothing between them), all the time, or still. It's plain
+CSS, and it hides itself while a module plays a video.
 
 The parts: themes.py (the data), shapes.py and shapes/ (the shapes), tiles.py (how they're drawn),
 greeting.py and fonts/ (the birthday text), schema.py (writes config_schema.json from themes.py)."""
@@ -20,7 +21,7 @@ from .greeting import POSITIONS, outline
 from .settings import all_theme_settings
 from .themes import THEMES
 
-SHOWER_SECONDS = 30
+SHOWER_SECONDS = 30  # a shower fades in over its first tenth and out over its last (widget.html)
 ONE_BY_ONE = ("sway_each", "spin_each")
 
 
@@ -31,10 +32,11 @@ class ForegroundThemeModule:
         self.theme = config.get("theme") if config.get("theme") in THEMES else "auto"
         self.settings = all_theme_settings(config)
         try:
-            self.every = max(int(config.get("shower_every") or 15), 1) * 60  # seconds between showers
+            self.every = max(int(config.get("shower_every") or 1), 1) * 60  # seconds between showers
         except (TypeError, ValueError):
-            self.every = 15 * 60
+            self.every = 60
         self.on_arrival = bool(config.get("shower_on_arrival", True))
+        self.on_wake = bool(config.get("shower_on_wake", True))
         self.preview = bool(config.get("preview"))  # the admin page's preview: a theme whatever the date
         self.timezone = config.get("globals", {}).get("timezone", "Europe/Stockholm")
         # A shower's end is checked this often; the mirror sends the card only when its HTML changed
@@ -61,6 +63,13 @@ class ForegroundThemeModule:
         """Someone came to the mirror: a shower to greet them (the screen wakes for them too)."""
         theme = self.current_theme()
         if theme and self.settings[theme].mode == "showers" and self.on_arrival and isinstance(data, dict) and data.get("motion"):
+            self.start_shower()
+
+    def on_shown(self, shown: bool):
+        """The card came on the screen (the screen woke, its schedule began, privacy mode ended, or the module
+        started): a shower to greet whoever is there. The mirror doesn't say which, so all of them count."""
+        theme = self.current_theme()
+        if shown and theme and self.settings[theme].mode == "showers" and self.on_wake:
             self.start_shower()
 
     def start_shower(self):
@@ -95,11 +104,17 @@ class ForegroundThemeModule:
         if theme is None:
             return ""  # out of every season: nothing on the screen, nothing to draw
         settings, spec = self.settings[theme], THEMES[theme]
-        single = settings.motion in ONE_BY_ONE or settings.motion == "twinkle"
+        # The admin page's preview shows a shower: a throwaway module never gets to one, and an empty preview says nothing
+        moving = self.moving(settings.mode) or (self.preview and settings.mode == "showers")
+        # Showers: nothing between them (a frozen decoration looked like a broken animation), so no layers and
+        # no GPU memory then; only a birthday greeting stays, all day
+        drawn = moving or settings.mode != "showers"
+        single = drawn and (settings.motion in ONE_BY_ONE or settings.motion == "twinkle")
         indexes, tile = tiles.plan(settings)
         return self.render_template(
-            "widget.html", settings=settings, moving=self.moving(settings.mode),
-            layers=[] if settings.motion in ONE_BY_ONE else [tiles.layer(theme, settings, i, tile) for i in indexes],
+            "widget.html", settings=settings, moving=moving, shower=moving and settings.mode == "showers",
+            shower_seconds=SHOWER_SECONDS,
+            layers=[tiles.layer(theme, settings, i, tile) for i in indexes] if drawn and settings.motion not in ONE_BY_ONE else [],
             singles=tiles.singles(theme, settings) if single else [], symbols=tiles.symbols(theme, settings) if single else "",
             tile=tile, side=tiles.side(settings, tile), wind_degrees=tiles.WIND_DEGREES,
-            rising=settings.variant in spec.rising, drift=settings.drift, greeting=self.greeting(theme))
+            rising=settings.variant in spec.rising, drift=drawn and settings.drift, greeting=self.greeting(theme))

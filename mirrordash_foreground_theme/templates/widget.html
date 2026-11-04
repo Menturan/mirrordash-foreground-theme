@@ -16,7 +16,11 @@
     /* While a module plays a video the decoration goes away, whatever its movement, and comes back after: the
        mirror sets data-video-is-playing on this card's host (MirrorDash ARCHITECTURE #33) */
     :host([data-video-is-playing]) .fx { display: none; }
-    .fx-shapes { position: absolute; inset: 0; }
+    .fx-shapes { position: absolute; inset: 0; opacity: var(--b); }
+    /* A shower fades in over its first tenth and out over its last, and stays out until the module sends the
+       card without it: a decoration that stops dead looks like a broken animation */
+    .fx.shower .fx-shapes { animation: fx-shower var(--shower) linear forwards; }
+    @keyframes fx-shower { 0% { opacity: 0; } 10%, 90% { opacity: var(--b); } 100% { opacity: 0; } }
     .fx-layer {
         position: absolute;
         left: calc(-1 * var(--side));
@@ -65,8 +69,8 @@
     .fx-greeting svg { height: 100%; max-width: 100%; fill: #ffffff; }
 </style>
 
-<div class="fx {{ settings.motion }}{% if moving %} moving{% endif %}{% if rising %} rising{% endif %}">
-    <div class="fx-shapes" style="opacity: {{ settings.brightness / 100 }}; --tile: {{ tile }}px; --side: {{ side }}px;">
+<div class="fx {{ settings.motion }}{% if moving %} moving{% endif %}{% if rising %} rising{% endif %}{% if shower %} shower{% endif %}">
+    <div class="fx-shapes" style="--b: {{ settings.brightness / 100 }}; --shower: {{ shower_seconds }}s; --tile: {{ tile }}px; --side: {{ side }}px;">
         {% for layer in layers %}
         <div class="fx-layer" style="background-image: {{ layer.image }}; --d: {{ layer.seconds }}s; --s: {{ layer.steps }}; --sw: {{ layer.sway }}s;"></div>
         {% endfor %}
