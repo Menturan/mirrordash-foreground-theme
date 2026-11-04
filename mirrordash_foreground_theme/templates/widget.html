@@ -1,45 +1,86 @@
-<!-- A theme's shapes over the screen, in MirrorDash's Foreground position (the mirror sets --md-layer-size
-     there; in a box it's a box of them). Each layer is one SVG tile (its own size, --tile) repeated over the
-     screen; while it moves the layer slides exactly one tile, a whole pixel per step, and starts over where it
-     looks the same. No script: the mirror pauses the animation while a video plays. -->
+<!-- A theme over the screen, in MirrorDash's Foreground position (the mirror sets --md-layer-size there; in a
+     box it's a box of it). Layers: one screen-sized SVG tile each, sliding one tile a whole pixel per step and
+     starting over where it looks the same (the Pi draws only when a shape moved). Wind leans the layer, sway
+     swings it. The one-by-one motions and twinkling stars are elements of their own. No script: the mirror
+     pauses the animations while a video plays. -->
 <style>
-    .snow {
+    .fx {
         position: relative;
         width: var(--md-layer-size, 40vw);
         height: var(--md-layer-size, 30vh);
         overflow: hidden;
         pointer-events: none;
     }
-    .snow-layer {
+    .fx-shapes, .fx-sway { position: absolute; inset: 0; }
+    .fx-layer {
         position: absolute;
         left: 0;
-        right: 0;
-        top: calc(-1 * var(--tile));
-        height: calc(100% + var(--tile));
-        background-size: var(--tile) var(--tile);
-        background-repeat: repeat;
+        width: 100%;
+        top: -1080px;
+        height: calc(100% + 1080px);
+        background-size: 1920px 1080px;
+        background-position: center top;
         will-change: transform;
     }
-    /* One whole pixel per step: the Pi draws only when a shape moved (each layer sets its own steps and duration) */
-    .snow.moving .snow-layer { animation: snow-fall 20s steps(400) infinite; }
-    .snow.rising .snow-layer { animation-direction: reverse; }  /* embers rise */
-    @keyframes snow-fall { to { transform: translateY(var(--tile)); } }
-    .snow-drift {
+    .fx.moving .fx-layer { animation-name: fx-fall; animation-iteration-count: infinite; }
+    .fx.rising .fx-layer, .fx.rising .fx-one { animation-direction: reverse; }
+    @keyframes fx-fall { to { transform: translateY(1080px); } }
+    /* Wind: the layer leans, its shapes still fall straight in it */
+    .fx.wind .fx-sway { inset: -25%; transform: rotate(-22deg); }
+    .fx.moving.sway .fx-sway { animation: fx-sway ease-in-out infinite alternate; }
+    @keyframes fx-sway { from { transform: translateX(-28px); } to { transform: translateX(28px); } }
+
+    /* One by one: each shape falls on its own, and sways or spins */
+    .fx-one { position: absolute; top: var(--y); will-change: transform; }
+    .fx-one > i { display: block; }
+    .fx.moving .fx-one { top: -10vh; animation: fx-one-fall var(--fall) linear var(--delay) infinite; }
+    .fx.moving.sway_each .fx-one > i { animation: fx-one-sway var(--beat) ease-in-out var(--delay) infinite alternate; }
+    .fx.moving.spin_each .fx-one > i { animation: fx-one-spin var(--beat) linear var(--delay) infinite; }
+    @keyframes fx-one-fall { to { transform: translateY(120vh); } }
+    @keyframes fx-one-sway { from { transform: translateX(-40px) rotate(-25deg); } to { transform: translateX(40px) rotate(25deg); } }
+    @keyframes fx-one-spin { to { transform: rotate(360deg); } }
+    .fx-star { position: absolute; }
+    .fx.moving .fx-star { animation: fx-twinkle var(--beat) ease-in-out var(--delay) infinite alternate; }
+    @keyframes fx-twinkle { from { opacity: 0.15; } to { opacity: 1; } }
+
+    .fx-drift { position: absolute; left: 0; bottom: 0; width: 100%; height: 24px; }
+    .fx-greeting {
         position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        height: 24px;
+        left: 5%;
+        right: 5%;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: center;
     }
+    .fx-greeting.bottom { top: auto; bottom: 60px; transform: none; }
+    .fx-greeting svg { height: 100%; max-width: 100%; fill: #ffffff; }
 </style>
 
-<div class="snow{% if moving %} moving{% endif %}{% if rising %} rising{% endif %}">
-    {% for layer in layers %}
-    <div class="snow-layer" style="--tile: {{ layer.tile }}px; background-image: {{ layer.image }}; animation-duration: {{ layer.seconds }}s; animation-timing-function: steps({{ layer.tile }});"></div>
-    {% endfor %}
-    {% if drift %}
-    <svg class="snow-drift" viewBox="0 0 1600 24" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 24 V16 Q140 8 300 15 T620 13 T960 16 T1300 10 T1600 15 V24Z" fill="rgba(255, 255, 255, 0.85)"/>
-    </svg>
+<div class="fx {{ settings.motion }}{% if moving %} moving{% endif %}{% if rising %} rising{% endif %}">
+    <div class="fx-shapes" style="opacity: {{ settings.brightness / 100 }};">
+        {% for layer in layers %}
+        <div class="fx-sway" style="animation-duration: {{ layer.sway }}s;">
+            <div class="fx-layer" style="background-image: {{ layer.image }}; animation-duration: {{ layer.seconds }}s; animation-timing-function: steps({{ layer.steps }});"></div>
+        </div>
+        {% endfor %}
+        {% if singles %}
+        <svg width="0" height="0" style="position: absolute;" aria-hidden="true"><defs>{{ symbols | safe }}</defs></svg>
+        {% for one in singles %}
+        {% set shape %}<svg width="{{ one.px }}" height="{{ one.px }}" viewBox="-1 -1 2 2" aria-hidden="true"><use href="#fg-{{ one.shape }}" x="-1" y="-1" width="2" height="2" fill="{{ one.color }}" fill-opacity="{{ one.alpha }}" transform="rotate({{ one.turn }})"/></svg>{% endset %}
+        {% if settings.motion == "twinkle" %}
+        <div class="fx-star" style="left: {{ one.x }}%; top: {{ one.y }}%; --beat: {{ one.beat }}s; --delay: {{ one.delay }}s;">{{ shape }}</div>
+        {% else %}
+        <div class="fx-one" style="left: {{ one.x }}%; --y: {{ one.y }}%; --fall: {{ one.fall }}s; --beat: {{ one.beat }}s; --delay: {{ one.delay }}s;"><i>{{ shape }}</i></div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% if drift %}
+        <svg class="fx-drift" viewBox="0 0 1600 24" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 24 V16 Q140 8 300 15 T620 13 T960 16 T1300 10 T1600 15 V24Z" fill="rgba(255, 255, 255, 0.85)"/>
+        </svg>
+        {% endif %}
+    </div>
+    {% if greeting %}
+    <div class="fx-greeting{% if greeting.top is none %} bottom{% endif %}" style="{% if greeting.top is not none %}top: {{ greeting.top }}%; {% endif %}height: {{ greeting.height }}px;">{{ greeting.svg | safe }}</div>
     {% endif %}
 </div>

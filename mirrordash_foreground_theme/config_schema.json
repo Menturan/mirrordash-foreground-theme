@@ -1,32 +1,42 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Foreground Theme",
-  "description": "Seasonal decoration over the mirror: snow, New Year's sparkles, hearts, spring petals, autumn leaves or Halloween embers. Put it in Foreground. Shapes that keep moving keep the Raspberry Pi drawing (warmer, and a video beside it may stutter); showers or still shapes cost next to nothing.",
+  "description": "Seasonal decoration over the mirror. Put it in Foreground. Each theme has its own settings below. Shapes that keep moving keep the Raspberry Pi drawing (warmer, and a video beside it may stutter); showers or still shapes cost next to nothing.",
   "type": "object",
   "properties": {
     "theme": {
       "type": "string",
-      "default": "auto",
-      "enum": ["auto", "snow", "newyear", "hearts", "petals", "leaves", "halloween"],
-      "enum_titles": ["By date", "Snow", "New Year's sparkles", "Hearts", "Spring petals", "Autumn leaves", "Halloween embers"],
       "title": "Theme",
-      "description": "By date: snow 1 Dec–6 Jan, sparkles 31 Dec–1 Jan, hearts 10–14 Feb, petals April–May, leaves 20 Sep–15 Nov, embers 25–31 Oct, and nothing on other days. Or one theme all year."
-    },
-    "mode": {
-      "type": "string",
-      "default": "showers",
-      "enum": ["showers", "falling", "still"],
-      "enum_titles": ["Now and then", "All the time", "Still"],
-      "title": "Movement",
-      "description": "Now and then: it moves for half a minute, then stands still. All the time looks best and costs the most."
-    },
-    "amount": {
-      "type": "string",
-      "default": "normal",
-      "enum": ["light", "normal", "heavy"],
-      "enum_titles": ["A little", "Normal", "A lot"],
-      "title": "How Much",
-      "description": "Fewer shapes are calmer and lighter for the Pi. How bright: the Opacity setting below."
+      "description": "By date: Birthday (on the birthdays below), New Year (12-31 to 01-01), Easter (palm sunday to easter monday), Midsummer (midsummer eve to sunday), Halloween (10-25 to 10-31), Snow (12-01 to 01-06), Hearts (02-10 to 02-14), Spring petals (04-01 to 05-31), Autumn leaves (09-20 to 11-15). Each theme's own block below changes its days. Or one theme all year.",
+      "default": "auto",
+      "enum": [
+        "auto",
+        "birthday",
+        "newyear",
+        "easter",
+        "midsummer",
+        "halloween",
+        "snow",
+        "hearts",
+        "petals",
+        "leaves",
+        "stars",
+        "rain"
+      ],
+      "enum_titles": [
+        "By date",
+        "Birthday",
+        "New Year",
+        "Easter",
+        "Midsummer",
+        "Halloween",
+        "Snow",
+        "Hearts",
+        "Spring petals",
+        "Autumn leaves",
+        "Stars",
+        "Rain"
+      ]
     },
     "shower_on_arrival": {
       "type": "boolean",
@@ -40,11 +50,1466 @@
       "title": "Minutes Between",
       "description": "Now and then: how often it moves by itself."
     },
-    "drift": {
-      "type": "boolean",
-      "default": true,
-      "title": "Snowdrift",
-      "description": "With snow: a low drift along the bottom edge. It never moves."
+    "birthday": {
+      "type": "object",
+      "title": "Birthday",
+      "description": "The birthday theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the birthdays below."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "confetti",
+          "enum": [
+            "confetti",
+            "streamers",
+            "balloons",
+            "dots"
+          ],
+          "enum_titles": [
+            "Confetti",
+            "Confetti and streamers",
+            "Balloons",
+            "Confetti and dots"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "party",
+          "enum": [
+            "party",
+            "gold",
+            "pastel"
+          ],
+          "enum_titles": [
+            "Party",
+            "Gold",
+            "Pastel"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "spin_each",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 110,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 85,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        },
+        "people": {
+          "type": "array",
+          "title": "Birthdays",
+          "description": "Whose birthdays: confetti and their name on the day.",
+          "items": {
+            "type": "object",
+            "title": "Birthday",
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Name"
+              },
+              "date": {
+                "type": "string",
+                "title": "Date",
+                "description": "MM-DD (or YYYY-MM-DD)."
+              }
+            }
+          }
+        },
+        "greeting_at": {
+          "type": "string",
+          "title": "Where the Text Is",
+          "description": "The greeting stays all day.",
+          "default": "quarter",
+          "enum": [
+            "quarter",
+            "golden",
+            "middle",
+            "bottom",
+            "none"
+          ],
+          "enum_titles": [
+            "A quarter down",
+            "Golden ratio (38%)",
+            "The middle",
+            "Bottom edge",
+            "No text"
+          ]
+        },
+        "font": {
+          "type": "string",
+          "title": "Font",
+          "description": "",
+          "default": "inter",
+          "enum": [
+            "inter",
+            "sacramento",
+            "great_vibes",
+            "dancing_script",
+            "pacifico",
+            "caveat",
+            "amatic_sc",
+            "fredoka",
+            "lobster"
+          ],
+          "enum_titles": [
+            "Inter, thin",
+            "Sacramento, a thin script",
+            "Great Vibes, an elegant script",
+            "Dancing Script, a cheerful script",
+            "Pacifico, retro",
+            "Caveat, handwritten",
+            "Amatic SC, hand-drawn capitals",
+            "Fredoka, round and playful",
+            "Lobster, bold and festive"
+          ]
+        }
+      }
+    },
+    "newyear": {
+      "type": "object",
+      "title": "New Year",
+      "description": "The new year theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the days below (none: never)."
+        },
+        "start": {
+          "type": "string",
+          "title": "From",
+          "default": "12-31",
+          "description": "MM-DD, e.g. 12-01."
+        },
+        "end": {
+          "type": "string",
+          "title": "To",
+          "default": "01-01",
+          "description": "MM-DD; may be after New Year."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "sparkles",
+          "enum": [
+            "sparkles",
+            "stars",
+            "confetti"
+          ],
+          "enum_titles": [
+            "Sparkles",
+            "Stars",
+            "Confetti"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "festive",
+          "enum": [
+            "festive",
+            "gold",
+            "silver"
+          ],
+          "enum_titles": [
+            "Festive",
+            "Gold",
+            "Silver"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "straight",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 100,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 80,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
+    },
+    "easter": {
+      "type": "object",
+      "title": "Easter",
+      "description": "The easter theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. Palm Sunday to Easter Monday."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "feathers",
+          "enum": [
+            "feathers",
+            "eggs",
+            "mixed"
+          ],
+          "enum_titles": [
+            "Feathers",
+            "Eggs",
+            "Mixed"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "yellow",
+          "enum": [
+            "yellow",
+            "pastel",
+            "white"
+          ],
+          "enum_titles": [
+            "Yellow",
+            "Pastel",
+            "White"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "sway",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 130,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 80,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
+    },
+    "midsummer": {
+      "type": "object",
+      "title": "Midsummer",
+      "description": "The midsummer theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. Midsummer Eve to Sunday."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "flowers",
+          "enum": [
+            "flowers",
+            "butterflies",
+            "meadow",
+            "birch"
+          ],
+          "enum_titles": [
+            "Flowers",
+            "Butterflies",
+            "Meadow",
+            "Birch leaves"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "meadow",
+          "enum": [
+            "meadow",
+            "white",
+            "green"
+          ],
+          "enum_titles": [
+            "Meadow",
+            "White",
+            "Green"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "sway",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 130,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 80,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
+    },
+    "halloween": {
+      "type": "object",
+      "title": "Halloween",
+      "description": "The halloween theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the days below (none: never)."
+        },
+        "start": {
+          "type": "string",
+          "title": "From",
+          "default": "10-25",
+          "description": "MM-DD, e.g. 12-01."
+        },
+        "end": {
+          "type": "string",
+          "title": "To",
+          "default": "10-31",
+          "description": "MM-DD; may be after New Year."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "mixed",
+          "enum": [
+            "mixed",
+            "pumpkins",
+            "lanterns",
+            "ghosts",
+            "bats",
+            "embers"
+          ],
+          "enum_titles": [
+            "Mixed",
+            "Pumpkins",
+            "Jack-o'-lanterns",
+            "Ghosts",
+            "Bats",
+            "Embers"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "halloween",
+          "enum": [
+            "halloween",
+            "orange",
+            "purple"
+          ],
+          "enum_titles": [
+            "Halloween",
+            "Orange",
+            "Purple and white"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "sway",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 180,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 85,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
+    },
+    "snow": {
+      "type": "object",
+      "title": "Snow",
+      "description": "The snow theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the days below (none: never)."
+        },
+        "start": {
+          "type": "string",
+          "title": "From",
+          "default": "12-01",
+          "description": "MM-DD, e.g. 12-01."
+        },
+        "end": {
+          "type": "string",
+          "title": "To",
+          "default": "01-06",
+          "description": "MM-DD; may be after New Year."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "fine",
+          "enum": [
+            "fine",
+            "flakes",
+            "crystals",
+            "simple",
+            "mixed"
+          ],
+          "enum_titles": [
+            "Fine snow",
+            "Snowflakes",
+            "Crystals",
+            "Simple flakes",
+            "Mixed"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "white",
+          "enum": [
+            "white",
+            "ice"
+          ],
+          "enum_titles": [
+            "White",
+            "Ice blue"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "straight",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 100,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 80,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        },
+        "drift": {
+          "type": "boolean",
+          "title": "Snowdrift",
+          "default": true,
+          "description": "A low drift along the bottom edge. It never moves."
+        }
+      }
+    },
+    "hearts": {
+      "type": "object",
+      "title": "Hearts",
+      "description": "The hearts theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the days below (none: never)."
+        },
+        "start": {
+          "type": "string",
+          "title": "From",
+          "default": "02-10",
+          "description": "MM-DD, e.g. 12-01."
+        },
+        "end": {
+          "type": "string",
+          "title": "To",
+          "default": "02-14",
+          "description": "MM-DD; may be after New Year."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "hearts",
+          "enum": [
+            "hearts",
+            "dots",
+            "simple"
+          ],
+          "enum_titles": [
+            "Hearts",
+            "Hearts and dots",
+            "Simple hearts"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "pink",
+          "enum": [
+            "pink",
+            "red",
+            "white"
+          ],
+          "enum_titles": [
+            "Pink",
+            "Red",
+            "White and pink"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "sway",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 130,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 80,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
+    },
+    "petals": {
+      "type": "object",
+      "title": "Spring petals",
+      "description": "The spring petals theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the days below (none: never)."
+        },
+        "start": {
+          "type": "string",
+          "title": "From",
+          "default": "04-01",
+          "description": "MM-DD, e.g. 12-01."
+        },
+        "end": {
+          "type": "string",
+          "title": "To",
+          "default": "05-31",
+          "description": "MM-DD; may be after New Year."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "petals",
+          "enum": [
+            "petals",
+            "blossom",
+            "tulips",
+            "mixed"
+          ],
+          "enum_titles": [
+            "Petals",
+            "Cherry blossom",
+            "Tulips",
+            "Mixed"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "cherry",
+          "enum": [
+            "cherry",
+            "white",
+            "apricot"
+          ],
+          "enum_titles": [
+            "Cherry",
+            "White",
+            "Apricot"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "sway",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 110,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 80,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
+    },
+    "leaves": {
+      "type": "object",
+      "title": "Autumn leaves",
+      "description": "The autumn leaves theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the days below (none: never)."
+        },
+        "start": {
+          "type": "string",
+          "title": "From",
+          "default": "09-20",
+          "description": "MM-DD, e.g. 12-01."
+        },
+        "end": {
+          "type": "string",
+          "title": "To",
+          "default": "11-15",
+          "description": "MM-DD; may be after New Year."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "mixed",
+          "enum": [
+            "mixed",
+            "classic",
+            "maple",
+            "oak",
+            "birch"
+          ],
+          "enum_titles": [
+            "Mixed",
+            "Leaves",
+            "Maple",
+            "Oak",
+            "Birch"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "autumn",
+          "enum": [
+            "autumn",
+            "gold",
+            "red"
+          ],
+          "enum_titles": [
+            "Autumn",
+            "Gold",
+            "Red"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "sway",
+          "enum": [
+            "straight",
+            "wind",
+            "sway",
+            "sway_each",
+            "spin_each"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind",
+            "Swaying (the whole layer; uses more while it moves)",
+            "Swaying one by one (heavy for the Pi)",
+            "Spinning one by one (heavy for the Pi)"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 160,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 85,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
+    },
+    "stars": {
+      "type": "object",
+      "title": "Stars",
+      "description": "The stars theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the days below (none: never)."
+        },
+        "start": {
+          "type": "string",
+          "title": "From",
+          "default": "",
+          "description": "MM-DD, e.g. 12-01."
+        },
+        "end": {
+          "type": "string",
+          "title": "To",
+          "default": "",
+          "description": "MM-DD; may be after New Year."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "sky",
+          "enum": [
+            "sky",
+            "stars",
+            "dots"
+          ],
+          "enum_titles": [
+            "Starry sky",
+            "Stars",
+            "Just dots"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "white",
+          "enum": [
+            "white",
+            "warm",
+            "cold"
+          ],
+          "enum_titles": [
+            "White",
+            "Warm",
+            "Cold"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "twinkle",
+          "enum": [
+            "twinkle",
+            "straight"
+          ],
+          "enum_titles": [
+            "Twinkling (uses more while it moves)",
+            "Straight down"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 90,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 70,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
+    },
+    "rain": {
+      "type": "object",
+      "title": "Rain",
+      "description": "The rain theme's settings.",
+      "properties": {
+        "by_date": {
+          "type": "boolean",
+          "title": "Show By Date",
+          "default": true,
+          "description": "When Theme is By date. On the days below (none: never)."
+        },
+        "start": {
+          "type": "string",
+          "title": "From",
+          "default": "",
+          "description": "MM-DD, e.g. 12-01."
+        },
+        "end": {
+          "type": "string",
+          "title": "To",
+          "default": "",
+          "description": "MM-DD; may be after New Year."
+        },
+        "mode": {
+          "type": "string",
+          "title": "Movement",
+          "description": "Now and then: half a minute when someone comes and every few minutes. All the time keeps the Pi drawing all day.",
+          "default": "showers",
+          "enum": [
+            "showers",
+            "falling",
+            "still"
+          ],
+          "enum_titles": [
+            "Now and then",
+            "All the time",
+            "Still"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "title": "Shapes",
+          "description": "",
+          "default": "rain",
+          "enum": [
+            "rain",
+            "drops",
+            "drizzle"
+          ],
+          "enum_titles": [
+            "Rain",
+            "Drops",
+            "Drizzle"
+          ]
+        },
+        "palette": {
+          "type": "string",
+          "title": "Colours",
+          "description": "",
+          "default": "blue",
+          "enum": [
+            "blue",
+            "white"
+          ],
+          "enum_titles": [
+            "Blue grey",
+            "White"
+          ]
+        },
+        "motion": {
+          "type": "string",
+          "title": "Motion",
+          "description": "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then.",
+          "default": "straight",
+          "enum": [
+            "straight",
+            "wind"
+          ],
+          "enum_titles": [
+            "Straight down",
+            "Slanting, as in wind"
+          ]
+        },
+        "amount": {
+          "type": "integer",
+          "title": "How Many",
+          "description": "Fewer are calmer; above 3 and 6 another layer is drawn.",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 10,
+          "step": 1
+        },
+        "size": {
+          "type": "integer",
+          "title": "Size (%)",
+          "description": "How large the shapes are.",
+          "default": 100,
+          "minimum": 50,
+          "maximum": 200,
+          "step": 10
+        },
+        "brightness": {
+          "type": "integer",
+          "title": "Brightness (%)",
+          "description": "How bright the shapes are.",
+          "default": 60,
+          "minimum": 10,
+          "maximum": 100,
+          "step": 5
+        },
+        "speed": {
+          "type": "integer",
+          "title": "Speed (%)",
+          "description": "Faster makes the Pi draw more often while it moves.",
+          "default": 100,
+          "minimum": 25,
+          "maximum": 300,
+          "step": 25
+        }
+      }
     }
   }
 }
