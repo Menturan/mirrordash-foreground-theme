@@ -52,17 +52,50 @@ async def test_how_many_how_large_and_how_fast():
         return sum(tile_svg(layer).count("<use") for layer in tiles_of(amount))
 
     def tiles_of(amount):
-        return [tiles.layer("leaves", make_module(leaves={"amount": amount}).settings["leaves"], i) for i in tiles.layers_for(amount)]
+        settings = make_module(leaves={"amount": amount}).settings["leaves"]
+        indexes, tile = tiles.plan(settings)
+        return [tiles.layer("leaves", settings, i, tile) for i in indexes]
 
-    assert [len(tiles.layers_for(a)) for a in (1, 3, 4, 6, 7, 10)] == [1, 1, 2, 2, 3, 3]
     assert count(1) < count(2) < count(5) < count(10)
     slow, fast = (make_module(leaves={"speed": speed}).settings["leaves"] for speed in (50, 200))
-    assert tiles.layer("leaves", slow, 1)["seconds"] == 4 * tiles.layer("leaves", fast, 1)["seconds"]
+    assert tiles.layer("leaves", slow, 1, 540)["seconds"] == 4 * tiles.layer("leaves", fast, 1, 540)["seconds"]
+
     def largest(size):
         settings = make_module(leaves={"size": size}).settings["leaves"]
-        return max(float(scale) for scale in re.findall(r"scale\(([\d.]+)\)", tile_svg(tiles.layer("leaves", settings, 1))))
+        return max(float(scale) for scale in re.findall(r"scale\(([\d.]+)\)", tile_svg(tiles.layer("leaves", settings, 1, 540))))
 
     assert largest(200) == pytest.approx(4 * largest(50), rel=0.05)
+
+
+def test_no_setting_asks_for_more_gpu_memory_than_the_budget():
+    """The Pi 3's WebKit crashed at three 1920x2160 layers (2026-11-04): two at most, fewer when wider."""
+    from mirrordash_foreground_theme.settings import theme_settings
+    for key, theme in THEMES.items():
+        for motion in theme.motions:
+            for amount in range(1, 11):
+                settings = theme_settings(key, {"motion": motion, "amount": amount})
+                assert tiles.gpu_mb(settings) <= tiles.GPU_BUDGET_MB, (key, motion, amount)
+    shown = {(motion, amount): tiles.plan(theme_settings("snow", {"motion": motion, "amount": amount}))
+             for motion in ("straight", "sway", "wind") for amount in (4, 5)}
+    # few shapes: one layer, a screen-high tile (nothing repeats); more: two layers of half-screen tiles;
+    # wind's skewed layer is wider, so it stays at one
+    assert shown == {("straight", 4): ([1], 1080), ("straight", 5): ([0, 2], 540), ("sway", 4): ([1], 1080),
+                     ("sway", 5): ([0, 2], 540), ("wind", 4): ([1], 1080), ("wind", 5): ([1], 1080)}
+
+
+def test_every_layer_steps_whole_pixels_on_the_shared_beat():
+    """All layers move at the same moments, so the screen redraws TICK times a second, not once per layer step."""
+    from mirrordash_foreground_theme.settings import theme_settings
+    for key in ("leaves", "rain"):
+        for speed in (25, 50, 100, 150, 300):
+            settings = theme_settings(key, {"speed": speed, "amount": 10})
+            for index in range(3):
+                for tile in (540, 1080):
+                    shown = tiles.layer(key, settings, index, tile)
+                    rate = shown["steps"] / shown["seconds"]
+                    assert tile % (tile // shown["steps"]) == 0  # whole pixels that end a tile exactly
+                    assert tiles.TICK / rate == pytest.approx(round(tiles.TICK / rate), abs=1e-9)  # on every n-th tick
+    assert tiles.stepping(18, 540) == (1, 18) and tiles.stepping(37, 540) == (1, 36) and tiles.stepping(71, 540) == (2, 36)
 
 
 @pytest.mark.asyncio

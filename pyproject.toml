@@ -1,6 +1,6 @@
 [project]
 name = "mirrordash-foreground-theme"
-version = "2.0.0"
+version = "2.0.1"
 description = "Seasonal decoration in front of the other modules: snow, Easter, Midsummer, Halloween, birthdays and more, each theme with its own shapes, colours and motion"
 requires-python = ">=3.14"
 license = "MIT"  # LICENSE: yours to change; the template it came from asks nothing (MIT-0)

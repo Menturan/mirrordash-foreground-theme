@@ -1,8 +1,10 @@
 <!-- A theme over the screen, in MirrorDash's Foreground position (the mirror sets --md-layer-size there; in a
-     box it's a box of it). Layers: one screen-sized SVG tile each, sliding one tile a whole pixel per step and
-     starting over where it looks the same (the Pi draws only when a shape moved). Wind leans the layer, sway
-     swings it. The one-by-one motions and twinkling stars are elements of their own. No script: the mirror
-     pauses the animations while a video plays. -->
+     box it's a box of it). Layers: an SVG tile half a screen high repeated down it, sliding one tile in whole
+     pixels and starting over where it looks the same; every layer steps on the same beat (tiles.py), so the Pi
+     redraws only then. Each layer is one GPU texture and nothing else: sway moves it with `translate` beside
+     the fall's `transform`, wind skews it (no wrapper layers, tiles.gpu_mb() counts what it costs). The
+     one-by-one motions and twinkling stars are elements of their own. No script: the mirror pauses the
+     animations while a video plays. -->
 <style>
     .fx {
         position: relative;
@@ -11,24 +13,27 @@
         overflow: hidden;
         pointer-events: none;
     }
-    .fx-shapes, .fx-sway { position: absolute; inset: 0; }
+    .fx-shapes { position: absolute; inset: 0; }
     .fx-layer {
         position: absolute;
-        left: 0;
-        width: 100%;
-        top: -1080px;
-        height: calc(100% + 1080px);
-        background-size: 1920px 1080px;
+        left: calc(-1 * var(--side));
+        width: calc(100% + 2 * var(--side));
+        top: calc(-1 * var(--tile));
+        height: calc(100% + var(--tile));
+        background-size: 1920px var(--tile);
         background-position: center top;
         will-change: transform;
     }
-    .fx.moving .fx-layer { animation-name: fx-fall; animation-iteration-count: infinite; }
-    .fx.rising .fx-layer, .fx.rising .fx-one { animation-direction: reverse; }
-    @keyframes fx-fall { to { transform: translateY(1080px); } }
-    /* Wind: the layer leans, its shapes still fall straight in it */
-    .fx.wind .fx-sway { inset: -25%; transform: rotate(-22deg); }
-    .fx.moving.sway .fx-sway { animation: fx-sway ease-in-out infinite alternate; }
-    @keyframes fx-sway { from { transform: translateX(-28px); } to { transform: translateX(28px); } }
+    .fx.moving .fx-layer { animation: fx-fall var(--d) steps(var(--s)) infinite; }
+    .fx.moving.sway .fx-layer { animation: fx-fall var(--d) steps(var(--s)) infinite, fx-sway var(--sw) ease-in-out infinite alternate; }
+    .fx.moving.rising .fx-layer, .fx.moving.rising .fx-one { animation-direction: reverse; }
+    .fx.moving.rising.sway .fx-layer { animation-direction: reverse, alternate; }
+    @keyframes fx-fall { to { transform: translateY(var(--tile)); } }
+    @keyframes fx-sway { from { translate: calc(-1 * var(--side)) 0; } to { translate: var(--side) 0; } }
+    /* Wind: the layer is skewed, so falling in it goes slanting */
+    .fx.wind .fx-layer { transform: skewX(-{{ wind_degrees }}deg); }
+    .fx.moving.wind .fx-layer { animation-name: fx-wind; }
+    @keyframes fx-wind { from { transform: skewX(-{{ wind_degrees }}deg); } to { transform: skewX(-{{ wind_degrees }}deg) translateY(var(--tile)); } }
 
     /* One by one: each shape falls on its own, and sways or spins */
     .fx-one { position: absolute; top: var(--y); will-change: transform; }
@@ -57,11 +62,9 @@
 </style>
 
 <div class="fx {{ settings.motion }}{% if moving %} moving{% endif %}{% if rising %} rising{% endif %}">
-    <div class="fx-shapes" style="opacity: {{ settings.brightness / 100 }};">
+    <div class="fx-shapes" style="opacity: {{ settings.brightness / 100 }}; --tile: {{ tile }}px; --side: {{ side }}px;">
         {% for layer in layers %}
-        <div class="fx-sway" style="animation-duration: {{ layer.sway }}s;">
-            <div class="fx-layer" style="background-image: {{ layer.image }}; animation-duration: {{ layer.seconds }}s; animation-timing-function: steps({{ layer.steps }});"></div>
-        </div>
+        <div class="fx-layer" style="background-image: {{ layer.image }}; --d: {{ layer.seconds }}s; --s: {{ layer.steps }}; --sw: {{ layer.sway }}s;"></div>
         {% endfor %}
         {% if singles %}
         <svg width="0" height="0" style="position: absolute;" aria-hidden="true"><defs>{{ symbols | safe }}</defs></svg>

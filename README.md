@@ -62,6 +62,12 @@ Each theme has a folding block of its own in the module's settings:
 
 A higher **Speed** makes the Pi draw more often while it moves. The mirror pauses every motion while a video plays.
 
+All layers step at the same moments, 36 times a second, so the screen redraws only then. Each moving layer is a
+texture in the GPU's memory, which a Raspberry Pi 3 has little of (about 40 MB free beside the other modules), so
+the module never asks for more than 25 MB: one layer as high as the screen for a few shapes, two with half-screen
+tiles for more (their pattern comes twice down the screen), and *Slanting* always one, its skewed layer being
+wider. **How Many** fills the layers more densely instead.
+
 ## Shapes and fonts
 
 The shapes are SVG files in `mirrordash_foreground_theme/shapes/`: silhouettes from

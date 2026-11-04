@@ -96,8 +96,10 @@ class ForegroundThemeModule:
             return ""  # out of every season: nothing on the screen, nothing to draw
         settings, spec = self.settings[theme], THEMES[theme]
         single = settings.motion in ONE_BY_ONE or settings.motion == "twinkle"
+        indexes, tile = tiles.plan(settings)
         return self.render_template(
             "widget.html", settings=settings, moving=self.moving(settings.mode),
-            layers=[] if settings.motion in ONE_BY_ONE else [tiles.layer(theme, settings, i) for i in tiles.layers_for(settings.amount)],
+            layers=[] if settings.motion in ONE_BY_ONE else [tiles.layer(theme, settings, i, tile) for i in indexes],
             singles=tiles.singles(theme, settings) if single else [], symbols=tiles.symbols(theme, settings) if single else "",
+            tile=tile, side=tiles.side(settings, tile), wind_degrees=tiles.WIND_DEGREES,
             rising=settings.variant in spec.rising, drift=settings.drift, greeting=self.greeting(theme))

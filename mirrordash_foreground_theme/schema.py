@@ -42,7 +42,7 @@ def theme_block(key: str, theme: Theme) -> dict:
         "palette": choice("Colours", theme.palettes, default(theme, "palette")),
         "motion": choice("Motion", {name: MOTIONS[name] for name in theme.motions}, default(theme, "motion"),
                          "How the shapes move. Those marked heavy draw each shape on its own: best with Now and then."),
-        "amount": slider("How Many", 1, 10, 1, default(theme, "amount"), "Fewer are calmer; above 3 and 6 another layer is drawn."),
+        "amount": slider("How Many", 1, 10, 1, default(theme, "amount"), "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory)."),
         "size": slider("Size (%)", 50, 200, 10, default(theme, "size"), "How large the shapes are."),
         "brightness": slider("Brightness (%)", 10, 100, 5, default(theme, "brightness"), "How bright the shapes are."),
         "speed": slider("Speed (%)", 25, 300, 25, default(theme, "speed"), "Faster makes the Pi draw more often while it moves."),
