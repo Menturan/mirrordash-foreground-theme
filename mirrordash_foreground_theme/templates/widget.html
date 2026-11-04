@@ -25,9 +25,9 @@
         height: calc(100% + var(--tile));
         background-size: 1920px var(--tile);
         background-position: center top;
-        will-change: transform;
+        /* a GPU layer only while it moves: standing still, it is drawn with the page and holds no texture */
     }
-    .fx.moving .fx-layer { animation: fx-fall var(--d) steps(var(--s)) infinite; }
+    .fx.moving .fx-layer { animation: fx-fall var(--d) steps(var(--s)) infinite; will-change: transform; }
     .fx.moving.sway .fx-layer { animation: fx-fall var(--d) steps(var(--s)) infinite, fx-sway var(--sw) ease-in-out infinite alternate; }
     .fx.moving.rising .fx-layer, .fx.moving.rising .fx-one { animation-direction: reverse; }
     .fx.moving.rising.sway .fx-layer { animation-direction: reverse, alternate; }
@@ -39,7 +39,8 @@
     @keyframes fx-wind { from { transform: skewX(-{{ wind_degrees }}deg); } to { transform: skewX(-{{ wind_degrees }}deg) translateY(var(--tile)); } }
 
     /* One by one: each shape falls on its own, and sways or spins */
-    .fx-one { position: absolute; top: var(--y); will-change: transform; }
+    .fx-one { position: absolute; top: var(--y); }
+    .fx.moving .fx-one { will-change: transform; }
     .fx-one > i { display: block; }
     .fx.moving .fx-one { top: -10vh; animation: fx-one-fall var(--fall) linear var(--delay) infinite; }
     .fx.moving.sway_each .fx-one > i { animation: fx-one-sway var(--beat) ease-in-out var(--delay) infinite alternate; }
