@@ -241,6 +241,12 @@
             "Lobster, bold and festive"
           ]
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "birthday"
+        ]
       }
     },
     "newyear": {
@@ -258,13 +264,23 @@
           "type": "string",
           "title": "From",
           "default": "12-31",
-          "description": "MM-DD, e.g. 12-01."
+          "description": "MM-DD, e.g. 12-01.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "end": {
           "type": "string",
           "title": "To",
           "default": "01-01",
-          "description": "MM-DD; may be after New Year."
+          "description": "MM-DD; may be after New Year.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "mode": {
           "type": "string",
@@ -370,6 +386,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "newyear"
+        ]
       }
     },
     "easter": {
@@ -487,6 +509,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "easter"
+        ]
       }
     },
     "midsummer": {
@@ -606,6 +634,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "midsummer"
+        ]
       }
     },
     "halloween": {
@@ -623,13 +657,23 @@
           "type": "string",
           "title": "From",
           "default": "10-25",
-          "description": "MM-DD, e.g. 12-01."
+          "description": "MM-DD, e.g. 12-01.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "end": {
           "type": "string",
           "title": "To",
           "default": "10-31",
-          "description": "MM-DD; may be after New Year."
+          "description": "MM-DD; may be after New Year.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "mode": {
           "type": "string",
@@ -741,6 +785,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "halloween"
+        ]
       }
     },
     "snow": {
@@ -758,13 +808,23 @@
           "type": "string",
           "title": "From",
           "default": "12-01",
-          "description": "MM-DD, e.g. 12-01."
+          "description": "MM-DD, e.g. 12-01.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "end": {
           "type": "string",
           "title": "To",
           "default": "01-06",
-          "description": "MM-DD; may be after New Year."
+          "description": "MM-DD; may be after New Year.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "mode": {
           "type": "string",
@@ -878,6 +938,12 @@
           "default": true,
           "description": "A low drift along the bottom edge. It never moves."
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "snow"
+        ]
       }
     },
     "hearts": {
@@ -895,13 +961,23 @@
           "type": "string",
           "title": "From",
           "default": "02-10",
-          "description": "MM-DD, e.g. 12-01."
+          "description": "MM-DD, e.g. 12-01.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "end": {
           "type": "string",
           "title": "To",
           "default": "02-14",
-          "description": "MM-DD; may be after New Year."
+          "description": "MM-DD; may be after New Year.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "mode": {
           "type": "string",
@@ -1007,6 +1083,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "hearts"
+        ]
       }
     },
     "petals": {
@@ -1024,13 +1106,23 @@
           "type": "string",
           "title": "From",
           "default": "04-01",
-          "description": "MM-DD, e.g. 12-01."
+          "description": "MM-DD, e.g. 12-01.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "end": {
           "type": "string",
           "title": "To",
           "default": "05-31",
-          "description": "MM-DD; may be after New Year."
+          "description": "MM-DD; may be after New Year.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "mode": {
           "type": "string",
@@ -1138,6 +1230,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "petals"
+        ]
       }
     },
     "leaves": {
@@ -1155,13 +1253,23 @@
           "type": "string",
           "title": "From",
           "default": "09-20",
-          "description": "MM-DD, e.g. 12-01."
+          "description": "MM-DD, e.g. 12-01.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "end": {
           "type": "string",
           "title": "To",
           "default": "11-15",
-          "description": "MM-DD; may be after New Year."
+          "description": "MM-DD; may be after New Year.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "mode": {
           "type": "string",
@@ -1271,6 +1379,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "leaves"
+        ]
       }
     },
     "stars": {
@@ -1288,13 +1402,23 @@
           "type": "string",
           "title": "From",
           "default": "",
-          "description": "MM-DD, e.g. 12-01."
+          "description": "MM-DD, e.g. 12-01.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "end": {
           "type": "string",
           "title": "To",
           "default": "",
-          "description": "MM-DD; may be after New Year."
+          "description": "MM-DD; may be after New Year.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "mode": {
           "type": "string",
@@ -1394,6 +1518,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "stars"
+        ]
       }
     },
     "rain": {
@@ -1411,13 +1541,23 @@
           "type": "string",
           "title": "From",
           "default": "",
-          "description": "MM-DD, e.g. 12-01."
+          "description": "MM-DD, e.g. 12-01.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "end": {
           "type": "string",
           "title": "To",
           "default": "",
-          "description": "MM-DD; may be after New Year."
+          "description": "MM-DD; may be after New Year.",
+          "show_if": {
+            "by_date": [
+              true
+            ]
+          }
         },
         "mode": {
           "type": "string",
@@ -1515,6 +1655,12 @@
           "maximum": 300,
           "step": 25
         }
+      },
+      "show_if": {
+        "theme": [
+          "auto",
+          "rain"
+        ]
       }
     }
   }

@@ -33,8 +33,11 @@ def theme_block(key: str, theme: Theme) -> dict:
                           "description": f"When Theme is By date. {when}."}}
     if isinstance(theme.days, tuple) or theme.days is None:
         start, end = theme.days or ("", "")
-        fields["start"] = {"type": "string", "title": "From", "default": start, "description": "MM-DD, e.g. 12-01."}
-        fields["end"] = {"type": "string", "title": "To", "default": end, "description": "MM-DD; may be after New Year."}
+        on_dates = {"by_date": [True]}  # the days matter only while it's shown by date
+        fields["start"] = {"type": "string", "title": "From", "default": start, "description": "MM-DD, e.g. 12-01.",
+                           "show_if": on_dates}
+        fields["end"] = {"type": "string", "title": "To", "default": end, "description": "MM-DD; may be after New Year.",
+                         "show_if": on_dates}
     fields |= {
         "mode": choice("Movement", MODES, default(theme, "mode"),
                        "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is "
@@ -58,7 +61,8 @@ def theme_block(key: str, theme: Theme) -> dict:
                                 "date": {"type": "string", "title": "Date", "description": "MM-DD (or YYYY-MM-DD)."}}}}
         fields["greeting_at"] = choice("Where the Text Is", POSITIONS, "quarter", "The greeting stays all day.")
         fields["font"] = choice("Font", FONTS, "inter")
-    return {"type": "object", "title": theme.title, "description": f"The {theme.title.lower()} theme's settings.", "properties": fields}
+    return {"type": "object", "title": theme.title, "description": f"The {theme.title.lower()} theme's settings.", "properties": fields,
+            "show_if": {"theme": ["auto", key]}}  # By date may show any theme; one theme all year shows only its own
 
 
 def build() -> dict:
