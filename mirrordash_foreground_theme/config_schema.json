@@ -139,6 +139,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 4,
@@ -148,6 +149,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 110,
@@ -157,6 +159,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 85,
@@ -166,6 +169,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -176,6 +180,7 @@
         "people": {
           "type": "array",
           "title": "Birthdays",
+          "default": [],
           "description": "Whose birthdays: confetti and their name on the day.",
           "items": {
             "type": "object",
@@ -352,6 +357,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 5,
@@ -361,6 +367,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 100,
@@ -370,6 +377,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 80,
@@ -379,6 +387,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -475,6 +484,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 3,
@@ -484,6 +494,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 130,
@@ -493,6 +504,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 80,
@@ -502,6 +514,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -600,6 +613,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 3,
@@ -609,6 +623,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 130,
@@ -618,6 +633,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 80,
@@ -627,6 +643,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -751,6 +768,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 2,
@@ -760,6 +778,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 180,
@@ -769,6 +788,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 85,
@@ -778,6 +798,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -898,6 +919,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 5,
@@ -907,6 +929,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 100,
@@ -916,6 +939,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 80,
@@ -925,6 +949,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -1049,6 +1074,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 3,
@@ -1058,6 +1084,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 130,
@@ -1067,6 +1094,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 80,
@@ -1076,6 +1104,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -1196,6 +1225,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 4,
@@ -1205,6 +1235,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 110,
@@ -1214,6 +1245,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 80,
@@ -1223,6 +1255,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -1345,6 +1378,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 2,
@@ -1354,6 +1388,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 160,
@@ -1363,6 +1398,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 85,
@@ -1372,6 +1408,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -1484,6 +1521,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 4,
@@ -1493,6 +1531,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 90,
@@ -1502,6 +1541,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 70,
@@ -1511,6 +1551,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,
@@ -1621,6 +1662,7 @@
         },
         "amount": {
           "type": "integer",
+          "format": "slider",
           "title": "How Many",
           "description": "Fewer are calmer; above 4 a second layer is drawn (with wind, never: the Pi's GPU memory).",
           "default": 4,
@@ -1630,6 +1672,7 @@
         },
         "size": {
           "type": "integer",
+          "format": "slider",
           "title": "Size (%)",
           "description": "How large the shapes are.",
           "default": 100,
@@ -1639,6 +1682,7 @@
         },
         "brightness": {
           "type": "integer",
+          "format": "slider",
           "title": "Brightness (%)",
           "description": "How bright the shapes are.",
           "default": 60,
@@ -1648,6 +1692,7 @@
         },
         "speed": {
           "type": "integer",
+          "format": "slider",
           "title": "Speed (%)",
           "description": "Faster makes the Pi draw more often while it moves.",
           "default": 100,

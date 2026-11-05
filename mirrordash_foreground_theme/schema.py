@@ -23,7 +23,7 @@ def choice(title: str, options: dict, chosen: str, description: str = "") -> dic
 
 
 def slider(title: str, smallest: int, largest: int, step: int, value: int, description: str) -> dict:
-    return {"type": "integer", "title": title, "description": description, "default": value,
+    return {"type": "integer", "format": "slider", "title": title, "description": description, "default": value,
             "minimum": smallest, "maximum": largest, "step": step}
 
 
@@ -55,7 +55,8 @@ def theme_block(key: str, theme: Theme) -> dict:
     if theme.drift:
         fields["drift"] = {"type": "boolean", "title": "Snowdrift", "default": True, "description": "A low drift along the bottom edge. It never moves."}
     if theme.days == "birthdays":
-        fields["people"] = {"type": "array", "title": "Birthdays", "description": "Whose birthdays: confetti and their name on the day.",
+        fields["people"] = {"type": "array", "title": "Birthdays", "default": [],
+                            "description": "Whose birthdays: confetti and their name on the day.",
                             "items": {"type": "object", "title": "Birthday", "properties": {
                                 "name": {"type": "string", "title": "Name"},
                                 "date": {"type": "string", "title": "Date", "description": "MM-DD (or YYYY-MM-DD)."}}}}
