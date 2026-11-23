@@ -72,6 +72,7 @@ def build() -> dict:
     return {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "title": "Foreground Theme",
+        "requires_mirrordash": "0.12",
         "description": "Seasonal decoration over the mirror. Put it in Foreground. Each theme has its own settings below. "
                        "Shapes that keep moving keep the Raspberry Pi drawing (warmer, and a video beside it may stutter); "
                        "showers or still shapes cost next to nothing.",
