@@ -16,10 +16,13 @@ DAYS = {"easter": "Palm Sunday to Easter Monday", "midsummer": "Midsummer Eve to
         "birthdays": "On the birthdays below"}
 
 
-def choice(title: str, options: dict, chosen: str, description: str = "") -> dict:
-    """An enum field from {key: title} or {key: (title, ...)}."""
-    return {"type": "string", "title": title, "description": description, "default": chosen, "enum": list(options),
-            "enum_titles": [value[0] if isinstance(value, tuple) else value for value in options.values()]}
+def choice(title: str, options: dict, chosen: str, description: str = "", help: str = "") -> dict:
+    """An enum field from {key: title} or {key: (title, ...)}; `help` is the long text behind the info button."""
+    field = {"type": "string", "title": title, "description": description}
+    if help:
+        field["help"] = help
+    return field | {"default": chosen, "enum": list(options),
+                    "enum_titles": [value[0] if isinstance(value, tuple) else value for value in options.values()]}
 
 
 def slider(title: str, smallest: int, largest: int, step: int, value: int, description: str) -> dict:
@@ -40,6 +43,7 @@ def theme_block(key: str, theme: Theme) -> dict:
                          "show_if": on_dates}
     fields |= {
         "mode": choice("Movement", MODES, default(theme, "mode"),
+                       "How the shapes move: in showers, all the time, or not at all.",
                        "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is "
                        "on for hours. All the time: moves while the screen is on; best when it only lights up when someone "
                        "comes. Still: never moves."),
@@ -73,12 +77,14 @@ def build() -> dict:
         "$schema": "http://json-schema.org/draft-07/schema#",
         "title": "Foreground Theme",
         "requires_mirrordash": "0.12",
-        "description": "Seasonal decoration over the mirror. Put it in Foreground. Each theme has its own settings below. "
-                       "Shapes that keep moving keep the Raspberry Pi drawing (warmer, and a video beside it may stutter); "
-                       "showers or still shapes cost next to nothing.",
+        "description": "Seasonal decoration over the mirror. Put it in Foreground.",
+        "help": "Each theme has its own settings below. "
+                "Shapes that keep moving keep the Raspberry Pi drawing (warmer, and a video beside it may stutter); "
+                "showers or still shapes cost next to nothing.",
         "type": "object",
         "properties": {
             "theme": choice("Theme", {"auto": "By date"} | {key: theme.title for key, theme in THEMES.items()}, "auto",
+                            "Which decoration to show: one chosen by the date, or one theme all year.",
                             by_date + " Or one theme all year."),
             "shower_every": {"type": "integer", "default": 1, "title": "Minutes Between",
                              "description": "Showers: how often one comes by itself."},

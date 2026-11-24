@@ -2,13 +2,15 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Foreground Theme",
   "requires_mirrordash": "0.12",
-  "description": "Seasonal decoration over the mirror. Put it in Foreground. Each theme has its own settings below. Shapes that keep moving keep the Raspberry Pi drawing (warmer, and a video beside it may stutter); showers or still shapes cost next to nothing.",
+  "description": "Seasonal decoration over the mirror. Put it in Foreground.",
+  "help": "Each theme has its own settings below. Shapes that keep moving keep the Raspberry Pi drawing (warmer, and a video beside it may stutter); showers or still shapes cost next to nothing.",
   "type": "object",
   "properties": {
     "theme": {
       "type": "string",
       "title": "Theme",
-      "description": "By date: Birthday (on the birthdays below), New Year (12-31 to 01-01), Easter (palm sunday to easter monday), Midsummer (midsummer eve to sunday), Halloween (10-25 to 10-31), Snow (12-01 to 01-06), Hearts (02-10 to 02-14), Spring petals (04-01 to 05-31), Autumn leaves (09-20 to 11-15). Each theme's own block below changes its days. Or one theme all year.",
+      "description": "Which decoration to show: one chosen by the date, or one theme all year.",
+      "help": "By date: Birthday (on the birthdays below), New Year (12-31 to 01-01), Easter (palm sunday to easter monday), Midsummer (midsummer eve to sunday), Halloween (10-25 to 10-31), Snow (12-01 to 01-06), Hearts (02-10 to 02-14), Spring petals (04-01 to 05-31), Autumn leaves (09-20 to 11-15). Each theme's own block below changes its days. Or one theme all year.",
       "default": "auto",
       "enum": [
         "auto",
@@ -71,7 +73,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -291,7 +294,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -418,7 +422,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -545,7 +550,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -696,7 +702,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -851,7 +858,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1008,7 +1016,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1157,7 +1166,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1308,7 +1318,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1461,7 +1472,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
@@ -1604,7 +1616,8 @@
         "mode": {
           "type": "string",
           "title": "Movement",
-          "description": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
+          "description": "How the shapes move: in showers, all the time, or not at all.",
+          "help": "Showers: half a minute that fades in and out, then nothing until the next one; best when the screen is on for hours. All the time: moves while the screen is on; best when it only lights up when someone comes. Still: never moves.",
           "default": "showers",
           "enum": [
             "showers",
