@@ -2,7 +2,7 @@
 
 Seasonal decoration over your [MirrorDash](https://github.com/Menturan/MirrorDash) mirror: snow, New Year,
 Easter, Midsummer, Halloween, autumn leaves, birthdays and more, each theme with its own shapes, colours and
-motion. Put it in the **Foreground** position (MirrorDash 0.12 or newer): it lies over the whole screen, in
+motion. Put it in the **Foreground** position (MirrorDash 0.21 or newer): it lies over the whole screen, in
 front of the other modules.
 
 ![Snow over a photo and the clock](screenshot.png)
@@ -25,31 +25,32 @@ front of the other modules.
 | Stars | Your own days | A twinkling starry sky |
 | Rain | Your own days | Rain, drops, drizzle |
 
-**Theme: By date** (the default) shows the theme of the day, and nothing on other days: then the module draws
-nothing at all. Where two themes' days meet, the one higher in the table wins. Or choose one theme to show
-all year.
+The **Themes** setting is a list, one row per theme (*Add theme*): the first row, from the top, whose days
+hold today is shown, and on other days the module draws nothing at all. Where two themes' days meet, move the one
+you want above the other. A new install starts with a row for each theme that has days of its own (not Stars and
+Rain). Tick **Show all year** on a row to show that theme whatever the date, or switch **Show** off.
 
 Only light shows on a two-way mirror (black is glass), so every theme is drawn in light colours.
 
 ## Each theme's settings
 
-Each theme has a folding block of its own in the module's settings:
+Each row of the Themes list opens to the boxes of its theme (they follow the theme you pick in the row):
 
 | Setting | |
 | :--- | :--- |
-| Show By Date, From, To | Whether By date shows it, and on which days (MM-DD; may run over New Year). Easter and Midsummer are worked out each year. |
+| Show all year, From, To | Whether it shows whatever the date, or on which days (MM-DD; may run over New Year). Easter and Midsummer are worked out each year. |
 | Movement | Showers, All the time or Still (below) |
 | Shapes, Colours | The theme's variants and palettes |
 | Motion | Straight down, slanting as in wind, swaying, or swaying or spinning one by one |
-| How Many, Size, Brightness, Speed | Sliders. Autumn leaves start few and large; snow many and small. |
+| How many, Size, Brightness, Speed | Sliders. Autumn leaves start few and large; snow many and small. |
 | Snowdrift (snow) | A low drift along the bottom edge |
-| Birthdays, Where the Text Is, Font (birthday) | Names and dates; the greeting a quarter down (the default), at the golden ratio, in the middle, at the bottom or not at all; in one of nine fonts |
+| Birthdays (a list of its own), Where the text is, Font (birthday) | Names and dates; the greeting a quarter down (the default), at the golden ratio, in the middle, at the bottom or not at all; in one of nine fonts |
 
 ## Movement, and what it costs
 
 | Movement | |
 | :--- | :--- |
-| Showers (default) | Half a minute that fades in and out, then no decoration at all until the next: every minute (*Minutes Between*), when the motion sensor sees someone (*Move When Someone Comes*) and when the screen turns on (*Move When the Screen Wakes*, also when the module's schedule begins or privacy mode ends). Best when the screen is on for hours. |
+| Showers (default) | Half a minute that fades in and out, then no decoration at all until the next: every minute (*Time between showers*), when the motion sensor sees someone (*Move when someone comes*) and when the screen turns on (*Move when the screen wakes*, also when the module's schedule begins or privacy mode ends). Best when the screen is on for hours. |
 | All the time | Moves while the screen is on. Best when the screen only lights up when someone comes. |
 | Still | Never moves. Costs next to nothing. |
 
@@ -70,7 +71,7 @@ All layers step at the same moments, 36 times a second, so the screen redraws on
 texture in the GPU's memory, which a Raspberry Pi 3 has little of (about 40 MB free beside the other modules), so
 the module never asks for more than 25 MB: one layer as high as the screen for a few shapes, two with half-screen
 tiles for more (their pattern comes twice down the screen), and *Slanting* always one, its skewed layer being
-wider. **How Many** fills the layers more densely instead.
+wider. **How many** fills the layers more densely instead.
 
 ## Shapes and fonts
 

@@ -1,4 +1,8 @@
-from mirrordash_foreground_theme.settings import month_day, theme_settings
+from mirrordash_foreground_theme.settings import (
+    all_theme_settings,
+    month_day,
+    theme_settings,
+)
 
 
 def test_each_theme_has_its_own_defaults():
@@ -6,7 +10,7 @@ def test_each_theme_has_its_own_defaults():
     assert (leaves.amount, leaves.size, leaves.motion, leaves.variant) == (2, 160, "sway", "mixed")  # few and large
     assert (snow.amount, snow.size, snow.drift) == (5, 100, True)
     stars = theme_settings("stars", {})
-    assert stars.by_date and not stars.start  # no days of its own: never by date until the owner gives some
+    assert not stars.all_year and not stars.start  # no days of its own: never by date until the owner gives some
 
 
 def test_whatever_is_unknown_or_out_of_range_falls_back():
@@ -18,7 +22,17 @@ def test_whatever_is_unknown_or_out_of_range_falls_back():
 
 
 def test_birthdays_keep_only_real_days():
-    people = theme_settings("birthday", {"people": [{"name": "Anna", "date": "03-14"}, {"name": "X", "date": "02-30"},
-                                                    {"name": "Leo", "date": "2016-02-29"}, "junk"]}).people
+    people = theme_settings("birthday", {}, people=[{"name": "Anna", "date": "03-14"}, {"name": "X", "date": "02-30"},
+                                                     {"name": "Leo", "date": "2016-02-29"}, "junk"]).people
     assert people == ({"name": "Anna", "date": "03-14"}, {"name": "Leo", "date": "02-29"})
     assert month_day(" 12-01 ") == "12-01" and month_day("1-1") is None
+
+
+def test_the_list_gives_each_theme_its_row_and_the_first_row_wins():
+    settings = all_theme_settings({"themes": [{"theme": "rain", "settings": {"amount": 7}}, {"theme": "snow", "enabled": False},
+                                              {"theme": "rain", "settings": {"amount": 2}}, {"theme": "palm"}, "junk"]})
+    assert list(settings)[:2] == ["rain", "snow"]  # the list's order first, then the unlisted themes
+    assert settings["rain"].amount == 7 and settings["rain"].enabled  # a second row for rain is ignored
+    assert not settings["snow"].enabled and not settings["leaves"].enabled  # off, or not in the list
+    assert settings["leaves"].size == 160  # but it keeps its defaults
+    assert all_theme_settings({"themes": "junk"})["snow"].enabled is False

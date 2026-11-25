@@ -1,5 +1,5 @@
-"""The owner's settings, checked: each theme's block merged with the theme's defaults (themes.py). Whatever is
-missing, unknown or out of range falls back to the default, so a hand-edited config can't break the card."""
+"""The owner's settings, checked: each row of the Themes list merged with the theme's defaults (themes.py). Whatever
+is missing, unknown or out of range falls back to the default, so a hand-edited config can't break the card."""
 
 import re
 from dataclasses import dataclass
@@ -15,7 +15,8 @@ MONTH_DAY = re.compile(r"^(\d{4}-)?(\d{2})-(\d{2})$")
 
 @dataclass(frozen=True)
 class ThemeSettings:
-    by_date: bool
+    enabled: bool  # a row of the list that's switched on
+    all_year: bool  # shown whatever the date
     start: str
     end: str
     mode: str
@@ -56,14 +57,20 @@ def _number(raw: dict, key: str, fallback: int) -> int:
         return fallback
 
 
-def theme_settings(key: str, raw) -> ThemeSettings:
+def parse_people(raw) -> tuple:
+    """The birthdays that are a name and a real day."""
+    return tuple({"name": str(person.get("name") or "").strip()[:40], "date": month_day(person.get("date"))}
+                 for person in raw or [] if isinstance(person, dict) and month_day(person.get("date")))
+
+
+def theme_settings(key: str, raw, enabled: bool = True, people=()) -> ThemeSettings:
+    """One theme's settings from its row's `settings` (None: all defaults); people are the top-level birthdays."""
     theme: Theme = THEMES[key]
     raw = raw if isinstance(raw, dict) else {}
     start, end = theme.days if isinstance(theme.days, tuple) else ("", "")
-    people = tuple({"name": str(person.get("name") or "").strip()[:40], "date": month_day(person.get("date"))}
-                   for person in raw.get("people") or [] if isinstance(person, dict) and month_day(person.get("date")))
     return ThemeSettings(
-        by_date=bool(raw.get("by_date", True)),  # a theme without days of its own (stars, rain) has empty ones: never
+        enabled=enabled,
+        all_year=bool(raw.get("all_year", False)),  # a theme without days of its own (stars, rain) has empty ones: never
         start=month_day(raw["start"]) if "start" in raw else start,
         end=month_day(raw["end"]) if "end" in raw else end,
         mode=_choice(raw, "mode", MODES, default(theme, "mode")),
@@ -72,11 +79,18 @@ def theme_settings(key: str, raw) -> ThemeSettings:
         motion=_choice(raw, "motion", theme.motions, default(theme, "motion")),
         **{name: _number(raw, name, default(theme, name)) for name in RANGES},
         drift=theme.drift and bool(raw.get("drift", True)),
-        people=people,
+        people=parse_people(people) if key == "birthday" else (),
         greeting_at=_choice(raw, "greeting_at", POSITIONS, "quarter"),
         font=_choice(raw, "font", FONTS, "inter"),
     )
 
 
 def all_theme_settings(config: dict) -> dict[str, ThemeSettings]:
-    return {key: theme_settings(key, config.get(key)) for key in THEMES}
+    """Every theme's settings, the listed ones first in the list's order (that order decides where days overlap),
+    a theme twice in the list taking its first row. A theme with no row is off (but still has its defaults)."""
+    rows = [row for row in config.get("themes") or [] if isinstance(row, dict) and row.get("theme") in THEMES]
+    people = config.get("people")
+    found = {}
+    for row in rows:
+        found.setdefault(row["theme"], theme_settings(row["theme"], row.get("settings"), bool(row.get("enabled", True)), people))
+    return found | {key: theme_settings(key, None, False, people) for key in THEMES if key not in found}

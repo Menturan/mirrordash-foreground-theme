@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+from helpers import config
 
 from mirrordash_foreground_theme import dates
 from mirrordash_foreground_theme.settings import all_theme_settings
@@ -24,20 +25,25 @@ def test_midsummer_eve_is_the_friday_from_19_to_25_june(year, eve):
     (date(2026, 6, 21), "midsummer"), (date(2027, 1, 7), None), (date(2026, 7, 1), None),
 ])
 def test_by_date_the_theme_of_the_season_and_nothing_between(day, theme):
-    assert dates.theme_of(day, all_theme_settings({})) == theme
+    assert dates.theme_of(day, all_theme_settings(config())) == theme
 
 
 def test_the_owner_moves_a_period_or_turns_a_theme_off():
-    moved = all_theme_settings({"leaves": {"start": "10-01", "end": "10-20"}})
+    moved = all_theme_settings(config(leaves={"start": "10-01", "end": "10-20"}))
     assert dates.theme_of(date(2026, 9, 25), moved) is None and dates.theme_of(date(2026, 10, 5), moved) == "leaves"
-    off = all_theme_settings({"snow": {"by_date": False}})
+    off = all_theme_settings({"themes": [{"theme": "snow", "enabled": False}]})
     assert dates.theme_of(date(2026, 12, 20), off) is None
-    stars = all_theme_settings({"stars": {"start": "07-01", "end": "07-31"}})  # no days of its own: the owner's
+    stars = all_theme_settings(config(stars={"start": "07-01", "end": "07-31"}))  # no days of its own: the owner's
     assert dates.theme_of(date(2026, 7, 10), stars) == "stars"
 
 
 def test_a_birthday_wins_over_the_season_and_29_february_comes_every_year():
-    settings = all_theme_settings({"birthday": {"people": [{"name": "Anna", "date": "12-20"}, {"name": "Leo", "date": "2016-02-29"}]}})
+    settings = all_theme_settings(config(people=[{"name": "Anna", "date": "12-20"}, {"name": "Leo", "date": "2016-02-29"}]))
     assert dates.theme_of(date(2026, 12, 20), settings) == "birthday"
     assert dates.birthday_names(date(2027, 2, 28), settings["birthday"].people) == ["Leo"]  # not a leap year
     assert dates.birthday_names(date(2028, 2, 28), settings["birthday"].people) == []  # a leap year: the 29th
+
+
+def test_all_year_shows_a_theme_whatever_the_date():
+    stars = all_theme_settings(config(theme="stars"))
+    assert dates.theme_of(date(2026, 7, 10), stars) == "stars"

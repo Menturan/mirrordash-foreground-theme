@@ -1,6 +1,6 @@
 """Seasonal decoration in front of the other modules, made for MirrorDash's Foreground position (it lies over
-the whole screen and takes no clicks). Each theme has its own settings (settings.py); "By date" picks the
-theme of the day (dates.py), and outside every season the card is empty and costs nothing.
+the whole screen and takes no clicks). Each row of the Themes list has its own settings (settings.py); the first row
+whose days hold today picks the theme of the day (dates.py), and outside every season the card is empty and costs nothing.
 
 Motion that never stops makes a Raspberry Pi redraw the screen all day (MirrorDash ARCHITECTURE #37: warm,
 and a video beside it stutters), so each theme has a mode: showers (half a minute that fades in and out, every
@@ -8,7 +8,7 @@ minute, when someone comes and when the screen wakes; nothing between them), all
 CSS, and it hides itself while a module plays a video.
 
 The parts: themes.py (the data), shapes.py and shapes/ (the shapes), tiles.py (how they're drawn),
-greeting.py and fonts/ (the birthday text), schema.py (writes config_schema.json from themes.py)."""
+greeting.py and fonts/ (the birthday text), fields.py (the boxes of a row), schema.py (writes config_schema.json from themes.py)."""
 
 import asyncio
 import time
@@ -17,6 +17,7 @@ from zoneinfo import ZoneInfo
 
 from . import tiles
 from .dates import birthday_names, theme_of
+from .fields import theme_fields
 from .greeting import POSITIONS, outline
 from .settings import all_theme_settings
 from .themes import THEMES
@@ -29,7 +30,6 @@ class ForegroundThemeModule:
     def __init__(self, config):
         self.config = config
         self.name = "mirrordash_foreground_theme"
-        self.theme = config.get("theme") if config.get("theme") in THEMES else "auto"
         self.settings = all_theme_settings(config)
         try:
             self.every = max(int(config.get("shower_every") or 1), 1) * 60  # seconds between showers
@@ -55,9 +55,11 @@ class ForegroundThemeModule:
             return date.today()
 
     def current_theme(self) -> str | None:
-        if self.theme != "auto":
-            return self.theme
         return theme_of(self.today(), self.settings) or ("snow" if self.preview else None)
+
+    async def settings_fields_settings(self, item):
+        """The boxes of a row in the Themes list: the ones of the theme the row has."""
+        return theme_fields(item["theme"]) if item.get("theme") in THEMES else {}
 
     def on_motion(self, data: dict):
         """Someone came to the mirror: a shower to greet them (the screen wakes for them too)."""

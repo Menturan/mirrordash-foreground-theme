@@ -41,8 +41,10 @@ def birthday_today(day: date, birthday: str) -> bool:
 
 def holds(key: str, settings, day: date) -> bool:
     """Whether a theme's days hold day, by its settings (settings.ThemeSettings)."""
-    if not settings.by_date:
+    if not settings.enabled:
         return False
+    if settings.all_year:
+        return True
     rule = THEMES[key].days
     if rule == "easter":
         sunday = easter(day.year)
@@ -56,8 +58,8 @@ def holds(key: str, settings, day: date) -> bool:
 
 
 def theme_of(day: date, settings: dict) -> str | None:
-    """The theme of the day: the first in THEMES whose days hold it, None outside every season."""
-    return next((key for key in THEMES if holds(key, settings[key], day)), None)
+    """The theme of the day: the first of the settings (the list's order) whose days hold it, None outside every season."""
+    return next((key for key, theme in settings.items() if holds(key, theme, day)), None)
 
 
 def birthday_names(day: date, people: list[dict]) -> list[str]:

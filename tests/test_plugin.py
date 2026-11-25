@@ -5,15 +5,18 @@ from datetime import date
 from unittest.mock import MagicMock, patch
 
 import pytest
+from helpers import config
 
 from mirrordash_foreground_theme import plugin, tiles
 from mirrordash_foreground_theme.plugin import ForegroundThemeModule
 from mirrordash_foreground_theme.themes import THEMES
 
 
-def make_module(today=date(2026, 12, 20), **settings):
-    """The module as the mirror sets it up, its date fixed, with the template replaced by what it gets."""
-    module = ForegroundThemeModule(settings)
+def make_module(today=date(2026, 12, 20), theme=None, people=None, preview=False, **settings):
+    """The module as the mirror sets it up, its date fixed, with the template replaced by what it gets.
+    `theme="leaves"` is a Themes list of that theme all year; `snow={...}` a row with those settings."""
+    shower = {key: settings.pop(key) for key in ("shower_every", "shower_on_arrival", "shower_on_wake") if key in settings}
+    module = ForegroundThemeModule(config(theme, people, **settings) | shower | ({"preview": True} if preview else {}))
     module.render_template = MagicMock(side_effect=lambda name, **context: context)
     module.today = lambda: today
     return module
@@ -152,20 +155,20 @@ async def test_between_showers_nothing_is_drawn_and_a_shower_fades_in_and_out():
     falling = await make_module(snow={"mode": "falling"}).render()
     assert falling["moving"] is True and falling["shower"] is False  # all the time: no fading
     people = [{"name": "Anna", "date": "12-20"}]
-    assert (await make_module(theme="birthday", birthday={"people": people}).render())["greeting"]  # stays all day
+    assert (await make_module(theme="birthday", people=people).render())["greeting"]  # stays all day
 
 
 @pytest.mark.asyncio
 async def test_the_birthday_greeting_names_whoever_has_their_birthday():
     people = [{"name": "Anna", "date": "12-20"}, {"name": "Åsa", "date": "12-20"}, {"name": "Leo", "date": "01-02"}]
-    module = make_module(birthday={"people": people, "font": "pacifico", "greeting_at": "golden"})
+    module = make_module(people=people, birthday={"font": "pacifico", "greeting_at": "golden"})
     module.translate = lambda key, default: {"birthday": "Grattis {names}!", "and": "och"}[key]
     shown = await module.render()
     assert 'aria-label="Grattis Anna och Åsa!"' in shown["greeting"]["svg"] and shown["greeting"]["top"] == 38.2
     assert shown["greeting"]["svg"].count("<path") == len("GrattisAnnaochÅsa!")  # a path per letter, no font to load
-    hidden = make_module(birthday={"people": people, "greeting_at": "none"})
+    hidden = make_module(people=people, birthday={"greeting_at": "none"})
     assert (await hidden.render())["greeting"] is None
-    bottom = make_module(birthday={"people": people, "greeting_at": "bottom"})
+    bottom = make_module(people=people, birthday={"greeting_at": "bottom"})
     assert (await bottom.render())["greeting"]["top"] is None
     assert (await make_module().render())["greeting"] is None  # snow: no text
 
@@ -180,3 +183,27 @@ def test_it_listens_for_the_motion_sensor():
     bus = MagicMock()
     module = ForegroundThemeModule({"event_bus": bus})
     bus.subscribe.assert_called_once_with("hardware.motion", module.on_motion)
+
+
+@pytest.mark.asyncio
+async def test_a_row_gets_the_boxes_of_its_theme():
+    module = make_module()
+    for key, theme in THEMES.items():
+        fields = await module.settings_fields_settings({"theme": key})
+        assert fields["variant"]["enum"] == list(theme.variants) and fields["motion"]["enum"] == list(theme.motions)
+        assert fields["size"]["unit"] == "%" and ("drift" in fields) == theme.drift
+        assert ("greeting_at" in fields) == (key == "birthday")
+        assert ("start" in fields) == (isinstance(theme.days, tuple) or theme.days is None)
+    assert await module.settings_fields_settings({"theme": "palm"}) == {} and await module.settings_fields_settings({}) == {}
+
+
+@pytest.mark.asyncio
+async def test_the_list_decides_what_shows_and_in_which_order():
+    assert await make_module(today=date(2026, 7, 1)).render() == ""  # the default list: nothing in July
+    snow_first = ForegroundThemeModule({"themes": [{"theme": "snow"}, {"theme": "newyear"}]})
+    snow_first.today = lambda: date(2026, 12, 31)
+    assert snow_first.current_theme() == "snow"  # both hold the day: the first row wins
+    first_off = ForegroundThemeModule({"themes": [{"theme": "newyear", "enabled": False}, {"theme": "snow"}]})
+    first_off.today = lambda: date(2026, 12, 31)
+    assert first_off.current_theme() == "snow"  # switched off: skipped
+    assert ForegroundThemeModule({}).current_theme() is None  # no rows: nothing
